@@ -1,11 +1,12 @@
 package ui
 
 import (
-	"ssht/client"
-	"ssht/config"
-	"ssht/util"
 	"strconv"
 	"strings"
+
+	"github.com/root913/ssht/client"
+	"github.com/root913/ssht/config"
+	"github.com/root913/ssht/util"
 
 	"github.com/derailed/tview"
 	"github.com/gdamore/tcell/v2"
@@ -48,11 +49,12 @@ func NewConnectionsTable(app *tview.Application, appStyles *config.Styles, appCo
 			return
 		}
 
-		app.Stop()
-
 		util.Logger.Debug().
 			Str("cell", cell.Text).
 			Msg("Selected row")
+
+		//TODO Add suspend
+		app.Stop()
 
 		connection := appConfig.App.Get(cell.Text)
 		if nil == connection {
@@ -62,7 +64,7 @@ func NewConnectionsTable(app *tview.Application, appStyles *config.Styles, appCo
 		client.Connect(connection)
 	})
 
-	headers := [7]string{"#", "Alias", "Host", "Port", "Username", "Key", "Type"}
+	headers := [7]string{"# Uuid", "Alias", "Host", "Port", "Username", "Key", "Type"}
 	connections := appConfig.App.Connections
 
 	headerFgColor := appStyles.Table().Header.FgColor.Color()
@@ -103,7 +105,7 @@ func NewConnectionsTable(app *tview.Application, appStyles *config.Styles, appCo
 		newCell(0, row, connection.Uuid)
 		newCell(1, row, connection.Alias)
 		newCell(2, row, connection.Host)
-		newCell(3, row, strconv.Itoa(connection.Port))
+		newCell(3, row, strconv.FormatInt(int64(connection.Port), 10))
 		newCell(4, row, connection.Username)
 		newCell(5, row, connection.KeyPath)
 		newCell(6, row, connection.Type.String())

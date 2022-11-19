@@ -4,11 +4,14 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
-	"ssht/util"
+
+	"github.com/root913/ssht/util"
 
 	"github.com/adrg/xdg"
 	"gopkg.in/yaml.v2"
 )
+
+var appConfigInstance *Config = nil
 
 // appConfig represents App configuration dir env var.
 const appConfig = "appCONFIG"
@@ -38,8 +41,21 @@ func AppHome() string {
 	return xdgAppHome
 }
 
-func NewConfig() *Config {
-	return &Config{App: NewApp()}
+func GetConfig() *Config {
+	if appConfigInstance == nil {
+		appConfigInstance = &Config{App: NewApp()}
+		util.Logger.Debug().
+			Str("config_path", AppHome()).
+			Msg("Loading configuration.")
+
+		if err := appConfigInstance.Load(AppConfigFile); err != nil {
+			util.Logger.Debug().
+				Str("config_file_path", AppConfigFile).
+				Msg("Unable to locate App config. Generating new configuration.")
+		}
+	}
+
+	return appConfigInstance
 }
 
 func (c *Config) Json() string {

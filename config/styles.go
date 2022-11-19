@@ -7,6 +7,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var appStylesInstance *Styles = nil
+
 type (
 	// Color represents a color.
 	Color string
@@ -138,10 +140,15 @@ func newBorder() Border {
 	}
 }
 
-func NewStyles() *Styles {
-	return &Styles{
-		Main: newStyle(),
+func GetStyles() *Styles {
+	if appStylesInstance == nil {
+		appStylesInstance = &Styles{
+			Main: newStyle(),
+		}
+		appStylesInstance.LoadSkin(GetConfig().App.Skin)
 	}
+
+	return appStylesInstance
 }
 
 // FgColor returns the foreground color.

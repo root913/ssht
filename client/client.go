@@ -3,6 +3,7 @@ package client
 import (
 	// "bytes"
 	// "errors"
+
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -10,8 +11,8 @@ import (
 	"os"
 	"time"
 
-	"ssht/config"
-	"ssht/util"
+	"github.com/root913/ssht/config"
+	"github.com/root913/ssht/util"
 
 	"golang.org/x/crypto/ssh"
 )
@@ -259,7 +260,7 @@ func newClient(connection config.Connection) (*Client, error) {
 func Connect(connection *config.Connection) {
 	util.Logger.Info().
 		Str("host", connection.Host).
-		Int("port", connection.Port).
+		Int16("port", connection.Port).
 		Msg("Conneting")
 
 	client, err := newClient(*connection)

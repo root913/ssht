@@ -37,7 +37,7 @@ type Connection struct {
 	Uuid      string         `yaml:"uuid"`
 	Alias     string         `yaml:"alias"`
 	Host      string         `yaml:"host"`
-	Port      int            `yaml:"port"`
+	Port      int16          `yaml:"port"`
 	Username  string         `yaml:"username"`
 	Password  string         `yaml:"password"`
 	KeyPath   string         `yaml:"keyPath"`
@@ -51,7 +51,7 @@ func getUuid() string {
 	return strings.ReplaceAll(uuid.New().String(), "-", "")[:12]
 }
 
-func newConnection(host string, port int, username string, password string, keyPath string, keyPass string, alias string, connectionType ConnectionType) *Connection {
+func newConnection(host string, port int16, username string, password string, keyPath string, keyPass string, alias string, connectionType ConnectionType) *Connection {
 	return &Connection{
 		Uuid:      getUuid(),
 		Host:      host,
@@ -67,21 +67,21 @@ func newConnection(host string, port int, username string, password string, keyP
 	}
 }
 
-func NewPasswordConnection(host string, port int, username string, password string, alias string) *Connection {
+func NewPasswordConnection(host string, port int16, username string, password string, alias string) *Connection {
 	return newConnection(host, port, username, password, "", "", alias, PasswordConnection)
 }
 
-func NewKeyConnection(host string, port int, username string, keyPath string, alias string) *Connection {
+func NewKeyConnection(host string, port int16, username string, keyPath string, alias string) *Connection {
 	return newConnection(host, port, username, "", keyPath, "", alias, KeyConnection)
 }
 
-func NewKeyPassphraseConnection(host string, port int, username string, keyPath string, keyPass string, alias string) *Connection {
+func NewKeyPassphraseConnection(host string, port int16, username string, keyPath string, keyPass string, alias string) *Connection {
 	return newConnection(host, port, username, "", keyPath, keyPass, alias, KeyPassphraseConnection)
 }
 
 func isPort(value interface{}) error {
-	s, _ := value.(int)
-	isPort := govalidator.IsPort(strconv.Itoa(s))
+	s, _ := value.(int16)
+	isPort := govalidator.IsPort(strconv.FormatInt(int64(s), 10))
 
 	if isPort {
 		return nil

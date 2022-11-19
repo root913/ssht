@@ -1,6 +1,9 @@
 package config
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type App struct {
 	Skin        string       `yaml:"skin"`
@@ -67,4 +70,14 @@ func (app *App) SetConnectionAlias(uuid string, alias string) bool {
 	app.Connections[index].UpdatedAt = time.Now()
 
 	return true
+}
+
+func (app *App) CheckForduplicates(connection *Connection) error {
+	for _, c := range app.Connections {
+		if c.Host == connection.Host && c.Port == connection.Port && c.Password == connection.Password && c.KeyPath == connection.KeyPath && c.KeyPass == connection.KeyPass {
+			return errors.New("This connection alredy exists.")
+		}
+	}
+
+	return nil
 }
