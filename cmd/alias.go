@@ -19,12 +19,12 @@ var aliasCmd = &cobra.Command{
 		uuid := args[0]
 		alias := args[1]
 
-		targetConnection := appConfig.App.Get(uuid)
+		targetConnection := appConfig.App.GetConnection(uuid)
 		if nil == targetConnection {
 			util.Logger.Fatal().Msg("Couldn't find connection by given uuid")
 			return
 		}
-		aliasConnection := appConfig.App.Get(alias)
+		aliasConnection := appConfig.App.GetConnection(alias)
 		if nil == targetConnection {
 			util.Logger.Fatal().Msg(fmt.Sprintf("Given alias is already used by connection %s", aliasConnection.Uuid))
 			return

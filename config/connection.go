@@ -34,12 +34,12 @@ func (c ConnectionType) String() string {
 }
 
 type Connection struct {
-	Uuid      string         `yaml:"uuid"`
-	Alias     string         `yaml:"alias"`
-	Host      string         `yaml:"host"`
-	Port      int16          `yaml:"port"`
-	Username  string         `yaml:"username"`
-	Password  string         `yaml:"password"`
+	Uuid      string `yaml:"uuid"`
+	Alias     string `yaml:"alias"`
+	Host      string `yaml:"host"`
+	Port      int16  `yaml:"port"`
+	Username  string `yaml:"username"`
+	Password  string
 	KeyPath   string         `yaml:"keyPath"`
 	KeyPass   string         `yaml:"keyPass"`
 	Type      ConnectionType `yaml:"type"`
@@ -57,7 +57,7 @@ func newConnection(host string, port int16, username string, password string, ke
 		Host:      host,
 		Port:      port,
 		Username:  username,
-		Password:  password,
+		Password:  "",
 		KeyPath:   keyPath,
 		KeyPass:   keyPass,
 		Type:      connectionType,
@@ -109,10 +109,10 @@ func (c *Connection) Validate() error {
 			&c.Type,
 			validation.Required,
 		),
-		validation.Field(
-			&c.Password,
-			validation.Required.When(c.Type == PasswordConnection),
-		),
+		// validation.Field(
+		// 	&c.Password,
+		// 	validation.Required.When(c.Type == PasswordConnection),
+		// ),
 		validation.Field(
 			&c.KeyPath,
 			validation.Required.When(c.Type == KeyConnection || c.Type == KeyPassphraseConnection),

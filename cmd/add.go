@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/root913/ssht/config"
+	"github.com/root913/ssht/credentials"
 	"github.com/root913/ssht/util"
 
 	"github.com/spf13/cobra"
@@ -37,7 +38,10 @@ var addCmd = &cobra.Command{
 			if errs := appConfig.App.CheckForduplicates(conn); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}
-			appConfig.App.AddConnection(conn)
+			appConfig.App.AddConnection(conn, passwordArg)
+
+			cred := credentials.NewCredentials(config.PassPath)
+			cred.Set(conn.Host, config.PasswordConnection.String(), conn.Username, passwordArg)
 		case config.KeyConnection:
 			if len(keyPathArg) == 0 {
 				keyPathArg = util.AskKeyPath()
@@ -49,7 +53,7 @@ var addCmd = &cobra.Command{
 			if errs := appConfig.App.CheckForduplicates(conn); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}
-			appConfig.App.AddConnection(conn)
+			appConfig.App.AddConnection(conn, "")
 		case config.KeyPassphraseConnection:
 			if len(keyPathArg) == 0 {
 				keyPathArg = util.AskKeyPath()
@@ -64,7 +68,10 @@ var addCmd = &cobra.Command{
 			if errs := appConfig.App.CheckForduplicates(conn); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}
-			appConfig.App.AddConnection(conn)
+			appConfig.App.AddConnection(conn, passwordArg)
+
+			cred := credentials.NewCredentials(config.PassPath)
+			cred.Set(conn.Host, config.KeyPassphraseConnection.String(), conn.Username, passwordArg)
 		default:
 			if len(passwordArg) == 0 {
 				passwordArg = util.AskPassword()
@@ -76,7 +83,10 @@ var addCmd = &cobra.Command{
 			if errs := appConfig.App.CheckForduplicates(conn); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}
-			appConfig.App.AddConnection(conn)
+			appConfig.App.AddConnection(conn, passwordArg)
+
+			cred := credentials.NewCredentials(config.PassPath)
+			cred.Set(conn.Host, config.PasswordConnection.String(), conn.Username, passwordArg)
 		}
 		appConfig.Save()
 

@@ -19,6 +19,7 @@ const appConfig = "appCONFIG"
 var (
 	// appConfigFile represents app config file location.
 	AppConfigFile = filepath.Join(AppHome(), "config.yml")
+	PassPath      = filepath.Join(AppHome(), "pass")
 )
 
 type (

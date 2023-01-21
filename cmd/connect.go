@@ -15,7 +15,7 @@ var connectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		appConfig := config.GetConfig()
 		uuidOrAliasArg := args[0]
-		connection := appConfig.App.Get(uuidOrAliasArg)
+		connection := appConfig.App.GetConnection(uuidOrAliasArg)
 		if nil == connection {
 			util.Logger.Fatal().Msg("Couldn't find connection by given uuid/alias")
 			return

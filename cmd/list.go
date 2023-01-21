@@ -15,6 +15,7 @@ func connectionTable(config *config.Config) {
 	for _, connection := range config.App.Connections {
 		fmt.Print(connection.Host)
 		fmt.Println()
+
 		tw.AppendRow(table.Row{connection.Uuid, connection.Alias, connection.Host, connection.Port, connection.Username, connection.KeyPath, connection.Type})
 	}
 	tw.SetIndexColumn(1)

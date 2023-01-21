@@ -6,6 +6,7 @@ import (
 
 	"github.com/root913/ssht/client"
 	"github.com/root913/ssht/config"
+	"github.com/root913/ssht/credentials"
 	"github.com/root913/ssht/util"
 
 	"github.com/derailed/tview"
@@ -56,9 +57,28 @@ func NewConnectionsTable(app *tview.Application, appStyles *config.Styles, appCo
 		//TODO Add suspend
 		app.Stop()
 
-		connection := appConfig.App.Get(cell.Text)
+		connection := appConfig.App.GetConnection(cell.Text)
 		if nil == connection {
-			util.Logger.Fatal().Msg("")
+			util.Logger.Fatal().Str("uuid", cell.Text).Msg("Connection not found")
+
+			return
+		}
+
+		cred := credentials.NewCredentials(config.PassPath)
+		if connection.Type == config.PasswordConnection {
+			password, err := cred.Get(connection.Host, connection.Type.String(), connection.Username)
+			if err != nil {
+				return
+			}
+			connection.Password = password
+		}
+
+		if connection.Type == config.KeyPassphraseConnection {
+			keyPass, err := cred.Get(connection.Host, connection.Type.String(), connection.Username)
+			if err != nil {
+				return
+			}
+			connection.KeyPass = keyPass
 		}
 
 		client.Connect(connection)

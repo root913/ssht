@@ -21,7 +21,7 @@ func (app *App) HasConnections() bool {
 	return len(app.Connections) > 0
 }
 
-func (app *App) Get(uuidOrAlias string) *Connection {
+func (app *App) GetConnection(uuidOrAlias string) *Connection {
 	for _, connection := range app.Connections {
 		if connection.Uuid == uuidOrAlias || connection.Alias == uuidOrAlias {
 			return &connection
@@ -30,7 +30,7 @@ func (app *App) Get(uuidOrAlias string) *Connection {
 	return nil
 }
 
-func (app *App) AddConnection(connection *Connection) {
+func (app *App) AddConnection(connection *Connection, password string) {
 	app.Connections = append(app.Connections, *connection)
 }
 
