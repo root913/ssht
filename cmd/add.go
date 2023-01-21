@@ -31,7 +31,7 @@ var addCmd = &cobra.Command{
 			if len(passwordArg) == 0 {
 				passwordArg = util.AskPassword()
 			}
-			conn := config.NewPasswordConnection(hostArg, portArg, usernameArg, passwordArg, aliasArg)
+			conn := config.NewPasswordConnection(hostArg, portArg, usernameArg, aliasArg)
 			if errs := conn.Validate(); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}
@@ -61,7 +61,7 @@ var addCmd = &cobra.Command{
 			if len(passwordArg) == 0 {
 				passwordArg = util.AskPassword()
 			}
-			conn := config.NewKeyPassphraseConnection(hostArg, portArg, usernameArg, keyPathArg, passwordArg, aliasArg)
+			conn := config.NewKeyPassphraseConnection(hostArg, portArg, usernameArg, keyPathArg, aliasArg)
 			if errs := conn.Validate(); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}
@@ -76,7 +76,7 @@ var addCmd = &cobra.Command{
 			if len(passwordArg) == 0 {
 				passwordArg = util.AskPassword()
 			}
-			conn := config.NewPasswordConnection(hostArg, portArg, usernameArg, passwordArg, aliasArg)
+			conn := config.NewPasswordConnection(hostArg, portArg, usernameArg, aliasArg)
 			if errs := conn.Validate(); errs != nil {
 				util.Logger.Fatal().Err(errs).Msg("")
 			}

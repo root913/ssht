@@ -51,7 +51,7 @@ func getUuid() string {
 	return strings.ReplaceAll(uuid.New().String(), "-", "")[:12]
 }
 
-func newConnection(host string, port int16, username string, password string, keyPath string, keyPass string, alias string, connectionType ConnectionType) *Connection {
+func newConnection(host string, port int16, username string, keyPath string, alias string, connectionType ConnectionType) *Connection {
 	return &Connection{
 		Uuid:      getUuid(),
 		Host:      host,
@@ -59,7 +59,7 @@ func newConnection(host string, port int16, username string, password string, ke
 		Username:  username,
 		Password:  "",
 		KeyPath:   keyPath,
-		KeyPass:   keyPass,
+		KeyPass:   "",
 		Type:      connectionType,
 		Alias:     alias,
 		CreatedAt: time.Now(),
@@ -67,16 +67,16 @@ func newConnection(host string, port int16, username string, password string, ke
 	}
 }
 
-func NewPasswordConnection(host string, port int16, username string, password string, alias string) *Connection {
-	return newConnection(host, port, username, password, "", "", alias, PasswordConnection)
+func NewPasswordConnection(host string, port int16, username string, alias string) *Connection {
+	return newConnection(host, port, username, "", alias, PasswordConnection)
 }
 
 func NewKeyConnection(host string, port int16, username string, keyPath string, alias string) *Connection {
-	return newConnection(host, port, username, "", keyPath, "", alias, KeyConnection)
+	return newConnection(host, port, username, keyPath, alias, KeyConnection)
 }
 
-func NewKeyPassphraseConnection(host string, port int16, username string, keyPath string, keyPass string, alias string) *Connection {
-	return newConnection(host, port, username, "", keyPath, keyPass, alias, KeyPassphraseConnection)
+func NewKeyPassphraseConnection(host string, port int16, username string, keyPath string, alias string) *Connection {
+	return newConnection(host, port, username, keyPath, alias, KeyPassphraseConnection)
 }
 
 func isPort(value interface{}) error {
@@ -109,17 +109,9 @@ func (c *Connection) Validate() error {
 			&c.Type,
 			validation.Required,
 		),
-		// validation.Field(
-		// 	&c.Password,
-		// 	validation.Required.When(c.Type == PasswordConnection),
-		// ),
 		validation.Field(
 			&c.KeyPath,
 			validation.Required.When(c.Type == KeyConnection || c.Type == KeyPassphraseConnection),
-		),
-		validation.Field(
-			&c.KeyPass,
-			validation.Required.When(c.Type == KeyPassphraseConnection),
 		),
 	)
 }

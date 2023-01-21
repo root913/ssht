@@ -31,53 +31,45 @@ func TestFailValidateKeyConnection(t *testing.T) {
 }
 
 func TestOkValidateKeyPassphraseConnection(t *testing.T) {
-	errs := NewKeyPassphraseConnection("host.localhost", int16(22), "username", "/some/path", "pass", "alias").Validate()
+	errs := NewKeyPassphraseConnection("host.localhost", int16(22), "username", "/some/path", "alias").Validate()
 	assert.Nil(t, errs)
 }
 
 func TestFailValidateKeyPassphraseConnection(t *testing.T) {
 	// empty host
-	errs := NewKeyPassphraseConnection("", int16(22), "username", "/some/path", "pass", "").Validate()
+	errs := NewKeyPassphraseConnection("", int16(22), "username", "/some/path", "").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "Host: cannot be blank")
 	// empty port
-	errs = NewKeyPassphraseConnection("host.localhost", int16(0), "username", "/some/path", "pass", "").Validate()
+	errs = NewKeyPassphraseConnection("host.localhost", int16(0), "username", "/some/path", "").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "Port: cannot be blank")
 	// empty username
-	errs = NewKeyPassphraseConnection("host.localhost", int16(22), "", "/some/path", "pass", "").Validate()
+	errs = NewKeyPassphraseConnection("host.localhost", int16(22), "", "/some/path", "").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "Username: cannot be blank")
 	// empty keyPath
-	errs = NewKeyPassphraseConnection("host.localhost", int16(22), "username", "", "pass", "").Validate()
+	errs = NewKeyPassphraseConnection("host.localhost", int16(22), "username", "", "").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "KeyPath: cannot be blank")
-	// empty keyPass
-	errs = NewKeyPassphraseConnection("host.localhost", int16(22), "username", "/some/path", "", "").Validate()
-	assert.NotNil(t, errs)
-	assert.Contains(t, errs.Error(), "KeyPass: cannot be blank")
 }
 
 func TestOkValidatePasswordConnection(t *testing.T) {
-	errs := NewPasswordConnection("host.localhost", int16(22), "username", "/some/path", "alias").Validate()
+	errs := NewPasswordConnection("host.localhost", int16(22), "username", "alias").Validate()
 	assert.Nil(t, errs)
 }
 
 func TestFailValidatePasswordConnection(t *testing.T) {
 	// empty host
-	errs := NewPasswordConnection("", int16(22), "username", "/some/path", "").Validate()
+	errs := NewPasswordConnection("", int16(22), "username", "alias").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "Host: cannot be blank")
 	// empty port
-	errs = NewPasswordConnection("host.localhost", int16(0), "username", "/some/path", "").Validate()
+	errs = NewPasswordConnection("host.localhost", int16(0), "username", "alias").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "Port: cannot be blank")
 	// empty username
-	errs = NewPasswordConnection("host.localhost", int16(22), "", "/some/path", "").Validate()
+	errs = NewPasswordConnection("host.localhost", int16(22), "", "alias").Validate()
 	assert.NotNil(t, errs)
 	assert.Contains(t, errs.Error(), "Username: cannot be blank")
-	// empty password
-	errs = NewPasswordConnection("host.localhost", int16(22), "username", "", "").Validate()
-	assert.NotNil(t, errs)
-	assert.Contains(t, errs.Error(), "Password: cannot be blank")
 }
